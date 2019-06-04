@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const app = express();
 
 const database = {
@@ -42,25 +43,25 @@ const database = {
 
 
 const saltRounds = 10;
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
-const someOtherPlaintextPassword = 'not_bacon';
+// const myPlaintextPassword = 's0/\/\P4$$w0rD';
+// const someOtherPlaintextPassword = 'not_bacon';
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send(database.users);
 })
 
 app.post('/signin', (req, res) => {
+    // if(bcrypt.compareSync(req.body.password, "$2b$10$6CuygOD8wkTrFen/1.qKW.l2BHS04JN/s7jj4VM5EEUHIEkoY5BB.")) {
+    console.log("jdjfjaj");
+    if(req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
+        console.log("login success");
+        res.json('success');
+    }
+    res.status(400).json('error loggig in');
     
-    // if(req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
-    if(bcrypt.compareSync(req.body.password, "$2b$10$6CuygOD8wkTrFen/1.qKW.l2BHS04JN/s7jj4VM5EEUHIEkoY5BB.")) {
-        res.json('sucessfully logged in');
-    }
-    else {
-        res.status(400).json('error loggig in');
-    }
-    res.json('signin');
 })
 
 app.post('/register', (req,res) => {
@@ -72,12 +73,11 @@ app.post('/register', (req,res) => {
         id: '125',
         name: name,
         email: email,
-        password: password,
         entries: '0',
         joined: new Date()
     })
 
-    res.json(name);
+    res.json(database.users[database.users.length - 1]);
 })
 
 app.post('/profile/:id', (req, res) => {
