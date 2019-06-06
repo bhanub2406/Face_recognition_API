@@ -13,9 +13,10 @@ const app = express();
 const db = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
+      host : 'postgresql-asymmetrical-25374',
+    //   host : '127.0.0.1',
       user : 'postgres',
-      password : 'planetology',
+      password : '',
       database : 'smart-brain'
     }
   });
